@@ -1,0 +1,29 @@
+import sys
+import psutil
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
+from PyQt5.QtCore import QTimer
+
+class SystemInfoWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("System Information")
+        self.layout = QVBoxLayout()
+        self.label = QLabel()
+        self.layout.addWidget(self.label)
+        self.setLayout(self.layout)
+        self.update_info()
+
+        # Set a timer to update the information every second
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_info)
+        self.timer.start(1000)
+
+    def update_info(self):
+        cpu_percent = psutil.cpu_percent()
+        self.label.setText(f"CPU Load: {cpu_percent}%")
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    widget = SystemInfoWidget()
+    widget.show()
+    sys.exit(app.exec_())
